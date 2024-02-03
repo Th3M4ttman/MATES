@@ -32,8 +32,8 @@ def main(scr):
 	scr.nodelay(True)
 	
 	#initialising the windows
-	capwin = Capture(1, w, 0, 1)
-	total_window = Counter("Total", 1,w, 1, 0)
+	capwin = Capture(1, w, 0, 1, history)
+	total_window = Counter("Total", 1,w, 1, 0, history)
 	
 	#time until next clear of the output field
 	clear_timer = None
@@ -48,7 +48,7 @@ def main(scr):
 		windows = []
 		
 		for i, mon in enumerate(mons):
-			windows.append(Counter(mon, i+2, w, i+2, 0))
+			windows.append(Counter(mon, i+2, w, i+2, 0, history))
 		scr.clear()
 		return windows, len(windows)+2, len(windows)+3
 	

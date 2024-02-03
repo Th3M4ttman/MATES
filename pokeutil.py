@@ -15,8 +15,11 @@ import pathlib
 
 pt = True
 
-if pt:
+try:
 	import pytesseract
+except ImportError:
+	input("Tesseract is required for auto detection. You can still use MATES but auto detection will fail.\nPress enter to continue... ")
+	pt = False
 	
 
 #path of this file
@@ -26,13 +29,14 @@ def get_device_proportions():
 	#captures a frame using android screencap
 	if pt:
 		os.system(f"screencap -p {PATH}/base3.jpg")
-	out = Image.open(f"{PATH}/base3.jpg").size
-	os.remove(f"{PATH}/base3.jpg")
-	return out
+		out = Image.open(f"{PATH}/base3.jpg").size
+		os.remove(f"{PATH}/base3.jpg")
+		return out
+	return 3040, 1440
 
 proportions = get_device_proportions()
 device_y, device_x = min(proportions), max(proportions)
-print(device_x, "x", device_y, sep="")
+#print(device_x, "x", device_y, sep="")
 
 def get_grayscale(image):
 	#converts image to black and white
@@ -121,6 +125,7 @@ def out_of_combat(image):
 def get_probability(encounters, donator=False, charm=False, charmlink=False):
 	# gets probability of success
 	
+	
 	rate = 30_000 #base shiny rate
 	
 	if donator:
@@ -131,6 +136,7 @@ def get_probability(encounters, donator=False, charm=False, charmlink=False):
 		rate -= rate*0.05 #5% 
 	
 	rate = 1/rate
+	print(encounters, file=open("wtf.txt", "w"))
 	return round((rate*100)*encounters, 1)
 	
 
@@ -153,6 +159,9 @@ DEFAULT = {
     "Tracking": [
     ],
     "Last_Addition": None,
+    "bonus":      {	"charm": False,
+				          	"linkcharm": False,
+					  		"donator": False	}
 }
 
 #list of pokemon

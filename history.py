@@ -40,6 +40,49 @@ class History():
 		with open(self.fn, "w") as f:
 			s = json.dumps(self.data, indent=4)
 			f.write(s)
+	
+	def setbonus(self, charm=False, linkcharm=False, donator=False):
+		
+		
+			
+		self.data["bonus"] = {	"charm": charm,
+												"linkcharm": linkcharm,
+												"donator": donator	}
+	
+	@property
+	def charm(self):
+		return self.data["bonus"]["charm"]
+		
+	@property
+	def linkcharm(self):
+		return self.data["bonus"]["linkcharm"]
+		
+	@property
+	def donator(self):
+		return self.data["bonus"]["donator"]
+	
+	def getbonus(self):
+		if self.charm and self.linkcharm:
+			linkcharm = False
+		else:
+			linkcharm = self.linkcharm
+		
+		if self.charm is True:
+			charm = 0.1
+		else:
+			charm = 0
+		
+		if linkcharm is True:
+			linkcharm = 0.05
+		else:
+			linkcharm = 0
+		
+		if self.donator is True:
+			donator = 0.1
+		else:
+			donator = 0
+		
+		return linkcharm + charm + donator
 			
 	def sub(self, mons):
 			self.data["Last_Addition"] = None
@@ -54,7 +97,7 @@ class History():
 					self.data[mon] -= qty
 				
 				if self.data[mon] < 1:
-					del self.data[mon]
+						del self.data[mon]
 
 			self.save()
 	
@@ -80,7 +123,7 @@ class History():
 	def total(self):
 		out = 0
 		for k, i in self.data.items():
-			if k in ("Last_Addition", "Tracking", "showtotal", "pcttotal", "pct"):
+			if k in ("Last_Addition", "Tracking", "showtotal", "pcttotal", "pct", "bonus"):
 				continue
 			out += int(i)
 		return out

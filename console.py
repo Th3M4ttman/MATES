@@ -6,6 +6,16 @@ def console(cmd, history):
 	if parts[0] == "init":
 		init_out_of_combat()
 		return "Initialised"
+		
+	if parts[0] == "charm":
+		history.setbonus(charm=not history.charm, linkcharm=history.linkcharm, donator=history.donator)
+		return "Toggled Shiny Charm"
+	elif parts[0] == "link":
+		history.setbonus(charm=history.charm, linkcharm=not history.linkcharm, donator=history.donator)
+		return "Toggled Shiny Charm Link"
+	elif parts[0] == "donator":
+		history.setbonus(charm=history.charm, linkcharm=history.linkcharm, donator=not history.donator)
+		return "Toggled Donator"
 	if parts[0] in ("+", "add"):
 		if parts[1].isnumeric():
 			if parts[2].title() in pokes:
@@ -54,7 +64,7 @@ def console(cmd, history):
 		
 	if parts[0] == "track":
 		if len(parts) == 1:
-			history.data["Tracking"] = [p for p in history.data.keys() if p not in ["Last_Addition", "Tracking", "showtotal", "pct", "pcttotal"]]
+			history.data["Tracking"] = [p for p in history.data.keys() if p not in ["Last_Addition", "bonus", "Tracking", "showtotal", "pct", "pcttotal"]]
 			history.save()
 			return "Tracking all encountered"
 		if parts[1].title() in pokes:
