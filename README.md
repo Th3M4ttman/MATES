@@ -57,6 +57,6 @@ Or type in commands
 | track (Pokémon)        | Sets the Pokémon as a tracked pokemon          | If given no Pokémon it tracks all Pokémon with registered encounters |
 | untrack (Pokémon)      | Sets the Pokémon as an untracked pokemon       | If given no Pokémon it untracks all                                  |
 | total                  | Toggles the visibility of the total encounters |                                                                      |
-| charm                  | Toggles shiny charm                            | Not implemented just yet \[ETA - tomorrow]                           |
-| donator                | Toggles donator                                | Not implemented just yet \[ETA - tomorrow]                           |
-| charmlink              | Toggles shiny charm link                       | Not implemented just yet \[ETA - tomorrow]                           |
+| charm                  | Toggles shiny charm                            |                           |
+| donator                | Toggles donator                                |                           |
+| link              | Toggles shiny charm link                       |                          |
