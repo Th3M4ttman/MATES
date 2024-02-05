@@ -183,7 +183,7 @@ def get_probability(encounters, donator=False, charm=False, charmlink=False, leg
 	
 	if legend:
 		rate = 1/6_000
-		return round((rate*100)*encounters, 1)
+		return round((rate*100)*encounters, 2)
 	
 	rate = 30_000 #base shiny rate
 	
@@ -196,15 +196,17 @@ def get_probability(encounters, donator=False, charm=False, charmlink=False, leg
 	
 	rate = 1/rate
 	print(encounters, file=open("wtf.txt", "w"))
-	return round((rate*100)*encounters, 1)
+	return round((rate*100)*encounters, 2)
 	
 
 def colour_probability(prob):
 	#return coloured percentage of probability
-	if prob < 25:
+	if prob < 10:
 		return 2
-	elif prob < 50:
+	if prob < 25:
 		return 3
+	elif prob < 50:
+		return 4
 	elif prob < 75:
 		return 5
 	return 1
@@ -248,13 +250,13 @@ def count_mons(image:np.ndarray, threshold:float =0.8) -> int:
 	
 def most_common(lst):
     return max(set(lst), key=lst.count)
+
+def get_gg(cap):
+	if type(cap) == np.ndarray:
+		cap = Image.fromarray(cap)
 	
-def get_mons(cap):
-	
-	num = count_mons(cap)
-	gray = get_grayscale(cap)
-	thresh = thresholding(gray)
-	cap = Image.fromarray(thresh)
+	gg = False
+	poke=""
 	h, w = cap.size
 
 	left = 0
@@ -262,25 +264,96 @@ def get_mons(cap):
 	right = device_x
 	bottom = device_y//3.6
 
-	cropped = cap.crop((left, top, right, bottom)).convert("RGB")
-	double_cropped = cap.crop((left, top, right//3, bottom)).convert("RGB")
+	cropped = cap.crop((left, top, right, bottom))#.convert("RGB")
+	double_cropped = cap.crop((left, top, right//3, bottom))#.convert("RGB")
 	
-	x = get_text(cropped).split(" ")
+	x = get_text(cropped).replace("\n", "")
+	x = "".join([m for m in x if m.lower() in "abcdefghijklmnopqrstuvwxyz "])
+	x = x.split(" ")
+	for i in x:
+		if i in ["Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune", "Shiny"]:
+			return True
+			poke = i
+		elif i in pokes:
+			poke = i
+			
+	x = get_text(double_cropped).replace("\n", "")
+	x = "".join([m for m in x if m.lower() in "abcdefghijklmnopqrstuvwxyz "])
+	x = x.split(" ")
+	for i in x:
+		if i in ["Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune", "Shiny"]:
+			return True
+			poke = i
+		elif i in pokes:
+			poke = i
+	
+	return False
+	
+def get_mons(cap):
+	
+	num = count_mons(cap)
+	#print(type(cap))
+	"""
+	gray = get_grayscale(cap)
+	thresh = thresholding(gray)
+	"""
+	if type(cap) == np.ndarray:
+		cap = Image.fromarray(cap)
+	
+	gg = False
+	h, w = cap.size
+
+	left = 0
+	top = 0
+	right = device_x
+	bottom = device_y//3.6
+
+	cropped = cap.crop((left, top, right, bottom))#.convert("RGB")
+	double_cropped = cap.crop((left, top, right//3, bottom))#.convert("RGB")
+	
+	x = get_text(cropped).replace("\n", "")
+	x = "".join([m for m in x if m.lower() in "abcdefghijklmnopqrstuvwxyz "])
+	y = str(x).replace("Shiny", "")
+	if y != x:
+		gg = True
+	
+	x = y.split(" ")
+	x = [m for m in x if len(m)>2 and m.isalpha()]
 	mons = []
+	#print(x)
 	for i in x:
 		if len(i) > 2 and i.isalpha():
 			if get_close_matches(i, pokes):
 				mons.append(get_close_matches(i, pokes)[0])
-				
+	
+	
+			
 	
 	if mons == []:
-		x = get_text(double_cropped).split(" ")
+		x = get_text(double_cropped).replace("\n", "")
+		x = "".join([m for m in x if m.lower() in "abcdefghijklmnopqrstuvwxyz "])
+		y = str(x).replace("Shiny", "")
+		if y != x:
+			gg = True
+		x = y.split(" ")
+		x = [m for m in x if len(m)>2 and m.isalpha()]
 		mons = []
+		#print(x)
 		for i in x:
 			if len(i) > 2 and i.isalpha():
 				if get_close_matches(i, pokes):
 					mons.append(get_close_matches(i, pokes)[0])
-					
+	
+	#print(mons)
+	mons = [mon for mon in mons if mon in pokes]
+	
+	
+	
+	if gg:
+		pass
+		
+	if mons == []:
+		return []
 	
 	if num == 5:
 		h = most_common(mons)
@@ -291,15 +364,15 @@ def get_mons(cap):
 	elif num == 2:
 		if len(mons) >= 2:
 			return mons[:2]
-		return mons[0], mons[0]
+		return [mons[0], mons[0]]
 	elif num == 1 and len(mons) > 0:
-		return mons[0]
-	return mons
+		return [mons[0]]
+	return []
 	
 def log(*text, sep=" ", end="\n"):
 	with open("./log.txt", "a") as f:
 		f.write(sep.join([str(t) for t in text])+end)
-		print(*text, sep=sep, end=end)
+		#print(*text, sep=sep, end=end)
 
 
 

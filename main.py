@@ -17,7 +17,9 @@ def main(scr):
 	curses.init_pair(1, curses.COLOR_GREEN, curses.COLOR_BLACK)
 	curses.init_pair(2, curses.COLOR_RED, curses.COLOR_BLACK)
 	curses.init_pair(3, curses.COLOR_MAGENTA, curses.COLOR_BLACK)
-	curses.init_pair(5, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+	curses.init_pair(4, curses.COLOR_YELLOW, curses.COLOR_BLACK)
+	curses.init_pair(5, curses.COLOR_CYAN, curses.COLOR_BLACK)
+	
 	
 	#hides cursor
 	curses. curs_set(0)
@@ -91,11 +93,12 @@ def main(scr):
 			if cap:
 				cropped = np.array(deepcopy(cap).crop((0,0,3040,400)))
 				
-				in_combat = not out_of_combat(cap) and count_mons(cropped) > 0
+				in_combat = not out_of_combat(cap)
 				#determine if in combat
 				if in_combat:
-					if not reported:
-						n_mons = count_mons(cropped)
+					n_mons = count_mons(cropped)
+					if not reported and n_mons > 0:
+		
 						mons = get_mons(cap)
 						if len(mons) > 0:
 							#reports the mon
@@ -105,11 +108,16 @@ def main(scr):
 							
 							
 							#adds it to the history and times out capture for 4 seconds
+							
 							if singles:
 								history.addsingle()
 							history.add(list_to_words(mons))
 							cap_timer = datetime.datetime.now() + datetime.timedelta(seconds=1)
-							out = list_to_words(mons)
+							if get_gg(cap):
+								os.system(f"screencap -p /{PATH}/screenshots/GG{mons[0]}.png")
+								out = "GG!! " + list_to_words(mons)
+							else:
+								out = list_to_words(mons)
 							clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=3)
 						
 						
