@@ -23,7 +23,7 @@ except ImportError:
 	
 
 #path of this file
-PATH = "/storage/emulated/0/Documents/Pydroid3/MATES" #"/".join(__file__.split("/")[:-1])
+PATH = "/".join(__file__.split("/")[:-1]) #"/storage/emulated/0/Documents/Pydroid3/MATES"
 
 def get_device_proportions():
 	#captures a frame using android screencap
@@ -78,6 +78,12 @@ def capture():
 	except FileNotFoundError:
 		return None
 
+import subprocess
+
+def GG():
+	os.system("sudo mpv {PATH}/gg.mp3")
+	
+
 def get_text(image):
 	#post process the image for OCR
 	gray = get_grayscale(image)
@@ -89,7 +95,7 @@ def get_text(image):
 	if pt:
 		#Image.fromarray(opening).save("/data/data/com.termux/files/home/Testo/wtf.jpg")
 		return pytesseract.image_to_string(opening, lang = 'eng', config = '--psm 6')
-	return
+	return ""
 	
 def init_out_of_combat():
 	if pt:
@@ -307,9 +313,11 @@ def get_mons(cap):
 	top = 0
 	right = device_x
 	bottom = device_y//3.6
-
+	
 	cropped = cap.crop((left, top, right, bottom))#.convert("RGB")
+	
 	double_cropped = cap.crop((left, top, right//3, bottom))#.convert("RGB")
+	
 	
 	x = get_text(cropped).replace("\n", "")
 	x = "".join([m for m in x if m.lower() in "abcdefghijklmnopqrstuvwxyz "])

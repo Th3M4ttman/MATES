@@ -51,7 +51,7 @@ def main(scr):
 		
 		for i, mon in enumerate(mons):
 			windows.append(Counter(mon, i+2, w, i+2, 0, history))
-		scr.clear()
+		#scr.clear()
 		return windows, len(windows)+2, len(windows)+3
 	
 	#generating windows
@@ -138,7 +138,11 @@ def main(scr):
 				n = history.data[window.title]
 			else:
 				n = 0
-			window.set(n)
+			
+			if window.value != n:
+				window.set(n)
+			else:
+				window.refresh()
 		
 		#updates the capture indicator
 		capwin.set(capturing)

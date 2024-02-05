@@ -12,7 +12,7 @@ def test():
 		basearray = cv2.imread(f"{PATH}/tests/{i}.png")
 		base = Image.fromarray(basearray)
 		cropped = np.array(deepcopy(base).crop((0,0,3040,400)))
-				
+		
 		in_combat = not out_of_combat(base) and count_mons(cropped) > 0
 		if  in_combat != expected[i]:
 			print("Case", i, "Failed")
@@ -36,4 +36,5 @@ def test():
 
 if __name__ == "__main__":
 	print("Running tests")
-	test()
+	if test():
+		GG()

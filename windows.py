@@ -68,19 +68,20 @@ class Counter:
     def addstr(self, *args, attr=0):
         self.window.addstr(*args, attr)
 
-    def refresh(self):
+    def refresh(self,):
         try:
 	        if self.visible is True:
 	        	end = self.window.getmaxyx()[1] - len("{self.prob}%")
-	        	self.window.addstr(self.title+f": {self.value}")
+	        	self.window.addstr(0, 0, self.title+f": {self.value}")
 	        	self.window.addstr(0, end, f"{self.prob}%", curses.color_pair(colour_probability(self.prob)))
 	        else:
-	        	self.clear()
+	        	pass #self.clear()
         except:
-        	pass	 
+        	pass
         self.window.refresh()
         
     def set(self, n):
+        #if n != self.value:
         self.clear()
         self.value = n
         self.refresh()
