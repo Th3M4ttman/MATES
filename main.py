@@ -60,9 +60,16 @@ def main(scr):
 	
 	#timer to next auto capture
 	cap_timer = datetime.datetime.now()
+	c = combat(1, w, 0, h-1)
+	in_combat=False
 	
+	#timer to next auto capture
+	cap_timer = datetime.datetime.now()
+	
+	singles = "Singles" in history.data["Tracking"]
 	#main program loop
 	while True:
+		c.refresh(in_combat, reported, singles)
 		mons = []
 		
 		#clears output every 4 seconds
@@ -71,45 +78,45 @@ def main(scr):
 				out = ""
 				clear_timer = None
 				scr.clear()
-				scr.addstr(5,0, text)
+				try:
+					scr.addstr(input_line,0, text)
+				except:
+					pass
+				
+		
 		
 		#Auto capture
 		if capturing and datetime.datetime.now() > cap_timer:
 			cap = capture() 
 			if cap:
 				cropped = np.array(deepcopy(cap).crop((0,0,3040,400)))
-			
+				
+				in_combat = not out_of_combat(cap) and count_mons(cropped) > 0
 				#determine if in combat
-				if cap and not out_of_combat(cap) and count_mons(cropped) > 0:
-					if reported: #ignore mon on screen
-						mons = []
-					else: #detect mons on screen
-						mons = get_mons(cropped)
+				if in_combat:
+					if not reported:
+						n_mons = count_mons(cropped)
+						mons = get_mons(cap)
+						if len(mons) > 0:
+							#reports the mon
+							reported = True
+							ti = str(datetime.datetime.now()).split(".")[0]
+							log(f"[{ti}]:", list_to_words(mons))
+							
+							
+							#adds it to the history and times out capture for 4 seconds
+							if singles:
+								history.addsingle()
+							history.add(list_to_words(mons))
+							cap_timer = datetime.datetime.now() + datetime.timedelta(seconds=1)
+							out = list_to_words(mons)
+							clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=3)
 						
-					if len(mons) > 0:
-						#reports the mon to the lpg
-						ti = str(datetime.datetime.now()).split(".")[0]
-						log(f"[{ti}]:", list_to_words(mons))
-						reported = True
 						
-						#adds it to the history and times out capture for 4 seconds
-						history.add(list_to_words(mons))
-						cap_timer = datetime.datetime.now() + datetime.timedelta(seconds=4)
-						scr.addstr(output_line+1, 0, list_to_words(mons))
-						
-					else:
-						#if no pokemon are found try again in 1 second
-						cap_timer = datetime.datetime.now() + datetime.timedelta(seconds=1)
-						
-					#deletes the frame
-					os.remove(f"{PATH}/frame.jpg")
-					
-				elif out_of_combat(cap):
+				else:
 					reported = False
-					scr.clear()
-					cap_timer = datetime.datetime.now() + datetime.timedelta(seconds=1)
 					
-			scr.refresh()
+			#scr.refresh()
 		
 		#sets the visibility of the total encounters
 		total_window.visible = history.showtotal
@@ -143,15 +150,27 @@ def main(scr):
 				else: #execute command
 					out = console(text.replace(">: ", ""), history)
 					history.save()
+					
+				if out == "Toggled singles tracking":
+					singles = not singles
+					if singles:
+						history.track("Singles")
+					else:
+						history.untrack("Singles")
+					windows, input_line, output_line = regen(scr, history.data["Tracking"])
 				
 				#reset the terminal area
 				text =">: "
 				scr.clear()
 				clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=3)
 				
+				
+					
 				#regenerate the tracking windows
 				if "Tracking" in out or "Untracking" in out or "Untracked" in out:
 					windows, input_line, output_line = regen(scr, history.data["Tracking"])
+				
+					
 					
 			except Exception as e:
 				out = ""
@@ -167,12 +186,18 @@ def main(scr):
 			scr.clear() 
 		
 		try: #command output
-			scr.addstr(input_line,0, text)
-			scr.addstr(output_line,0, out)
+			try:
+				scr.addstr(input_line,0, text)
+				scr.addstr(output_line,0, out)
+			except Exception as e:
+				if e.__class__ == TypeError:
+					raise e
+					
 		except TypeError:
 			scr.addstr(6,0, "Unkown Error.")
 			clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=3)
 			out = ""
+		
 	
 		scr.refresh()
 		

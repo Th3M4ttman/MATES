@@ -1,10 +1,11 @@
 import os, json
 from collections import defaultdict
 from copy import deepcopy
-from pokeutil import DEFAULT
+from pokeutil import DEFAULT, pokes
 
 PATH = "/".join(__file__.split("/")[:-1])
-print(os.path.exists(f"{PATH}/history.json"))
+#print(os.path.exists(f"{PATH}/history.json"))
+
 class History():
 	def __init__(self, fn=f"{PATH}/history.json"):
 		self.fn = fn
@@ -83,7 +84,25 @@ class History():
 			donator = 0
 		
 		return linkcharm + charm + donator
-			
+	
+	def track(self, mon):
+		if mon not in self.data["Tracking"]:
+			self.data["Tracking"].append(mon)
+		self.save()
+	
+	def untrack(self, mon):
+		if mon in self.data["Tracking"]:
+			self.data["Tracking"].remove(mon)
+		self.save()
+				
+	
+	def addsingle(self):
+		if "Singles" not in self.data.keys():
+			self.data["Singles"] = 1
+		else:
+			self.data["Singles"] += 1
+		self.save()
+		
 	def sub(self, mons):
 			self.data["Last_Addition"] = None
 			mons = mons.split(", ")
@@ -123,7 +142,7 @@ class History():
 	def total(self):
 		out = 0
 		for k, i in self.data.items():
-			if k in ("Last_Addition", "Tracking", "showtotal", "pcttotal", "pct", "bonus"):
+			if k in ("Last_Addition", "Tracking", "showtotal", "pcttotal", "pct", "bonus", "Singles"):
 				continue
 			out += int(i)
 		return out

@@ -25,7 +25,10 @@ class Capture:
         
         newstr = bonus + "%"
         string = newstr + string[len(newstr) + 4:]
-        self.window.addstr(0,4, str(string), color)
+        try:
+        	self.window.addstr(0,4, str(string), color)
+        except:
+        	pass
 
     def refresh(self):
         #self.clear()
@@ -53,6 +56,8 @@ class Counter:
     
     @property
     def prob(self):
+    	if self.title == "Singles":
+    		return get_probability(self.value, self.history.donator, self.history.charm, self.history.linkcharm, True)
     	return get_probability(self.value, self.history.donator, self.history.charm, self.history.linkcharm)
     
     
@@ -64,12 +69,15 @@ class Counter:
         self.window.addstr(*args, attr)
 
     def refresh(self):
-        if self.visible is True:
-        	end = self.window.getmaxyx()[1] - len("{self.prob}%")
-        	self.window.addstr(self.title+f": {self.value}")
-        	self.window.addstr(0, end, f"{self.prob}%", curses.color_pair(colour_probability(self.prob)))
-        else:
-        	self.clear()
+        try:
+	        if self.visible is True:
+	        	end = self.window.getmaxyx()[1] - len("{self.prob}%")
+	        	self.window.addstr(self.title+f": {self.value}")
+	        	self.window.addstr(0, end, f"{self.prob}%", curses.color_pair(colour_probability(self.prob)))
+	        else:
+	        	self.clear()
+        except:
+        	pass	 
         self.window.refresh()
         
     def set(self, n):
@@ -77,4 +85,27 @@ class Counter:
         self.value = n
         self.refresh()
         
-        
+class LegendCounter(Counter):
+    def __init__(self, title, h, w, y, x, history):
+    	super().__init__(title, h, w, y, x, history)
+    	
+class combat():
+	def __init__(self, h, w, y, x, in_combat=False, reported=False, singles=False):
+		self.in_combat = in_combat
+		self.reported = reported
+		self.singles = singles
+		self.window = curses.newwin(h, w, x, y)
+		self.refresh()
+		
+	def clear(self):
+		self.window.clear()
+		
+	def refresh(self, combat=False, reported=False, singles=False):
+		self.in_combat = combat
+		self.reported = reported
+		self.singles = singles
+		
+		self.window.addstr(0, 1, "C", curses.color_pair(1) if self.in_combat else curses.color_pair(2))
+		self.window.addstr(0, 2, "R", curses.color_pair(1) if self.reported else curses.color_pair(2))
+		self.window.addstr(0, 3, "S", curses.color_pair(1) if self.singles else curses.color_pair(2))
+		self.window.refresh()

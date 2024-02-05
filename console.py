@@ -3,6 +3,10 @@ from pokeutil import pokes, init_out_of_combat
 
 def console(cmd, history):
 	parts = cmd.split(" ")
+	
+	if parts[0] == "singles":
+		return "Toggled singles tracking"
+		
 	if parts[0] == "init":
 		init_out_of_combat()
 		return "Initialised"
@@ -67,7 +71,7 @@ def console(cmd, history):
 			history.data["Tracking"] = [p for p in history.data.keys() if p not in ["Last_Addition", "bonus", "Tracking", "showtotal", "pct", "pcttotal"]]
 			history.save()
 			return "Tracking all encountered"
-		if parts[1].title() in pokes:
+		if parts[1].title() in pokes or parts[1]=="singles":
 			if parts[1].title() in history.data["Tracking"]:
 				return "Already tracking "+ parts[1].title() 
 			else:
