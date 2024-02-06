@@ -52,7 +52,7 @@ def console(cmd, history):
 		else:
 			return f"{parts[1].title()} not found"
 			
-	if parts[0] == "reset":
+	if parts[0] in ["reset", "r"]:
 		if len(parts) > 1:
 			if parts[1].title() in pokes:
 				del history.data[parts[1].title()]
@@ -66,7 +66,7 @@ def console(cmd, history):
 		history.toggle_total()
 		return "Toggled Total"
 		
-	if parts[0] == "track":
+	if parts[0] in ["track", "t"]:
 		if len(parts) == 1:
 			history.data["Tracking"] = [p for p in history.data.keys() if p not in ["Last_Addition", "bonus", "Tracking", "showtotal", "pct", "pcttotal"]]
 			history.save()
@@ -81,7 +81,7 @@ def console(cmd, history):
 		else:
 			return f"No such pokemon: {parts[1].title()}"
 			
-	if parts[0] == "untrack":
+	if parts[0] in ["untrack", "u"]:
 		if len(parts) == 1:
 			history.data["Tracking"] = []
 			history.save()

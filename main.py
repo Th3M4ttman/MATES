@@ -93,7 +93,7 @@ def main(scr):
 			if cap:
 				cropped = np.array(deepcopy(cap).crop((0,0,3040,400)))
 				
-				in_combat = not out_of_combat(cap)
+				in_combat = count_mons(cropped) > 0#out_of_combat(capture())
 				#determine if in combat
 				if in_combat:
 					n_mons = count_mons(cropped)
