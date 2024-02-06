@@ -3,6 +3,7 @@ import time
 from curses import wrapper, newwin
 from pokeutil import get_probability, colour_probability
 import datetime
+from humanize import intcomma
 
 class Capture:
     def __init__(self, h, w, y, x, history):
@@ -72,7 +73,7 @@ class Counter:
         try:
 	        if self.visible is True:
 	        	end = self.window.getmaxyx()[1] - len("{self.prob}%")
-	        	self.window.addstr(0, 0, self.title+f": {self.value}")
+	        	self.window.addstr(0, 0, self.title+f": {intcomma(self.value)}")
 	        	self.window.addstr(0, end, f"{self.prob}%", curses.color_pair(colour_probability(self.prob)))
 	        else:
 	        	pass #self.clear()
