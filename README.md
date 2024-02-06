@@ -24,6 +24,7 @@ No I'm not joking.
 | tesseract (in termux: pkg install tesseract)                    |
 | pytesseract (in termux: pip install pytesseract)                |
 | opencv2 (in termux: pkg install opencv-python)                  |
+| humanize (in termux: pip install humanize)                      |
 
 
 don't get your hopes up too high. this is janky and sometimes doesnt work. if you have an issue please leave a report on the github issues page 
