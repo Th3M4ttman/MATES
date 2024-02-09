@@ -1,4 +1,4 @@
-from pokeutil import pokes, init_out_of_combat
+from pokeutil import pokes
 
 
 def console(cmd, history):
@@ -7,19 +7,18 @@ def console(cmd, history):
 	if parts[0] == "singles":
 		return "Toggled singles tracking"
 		
-	if parts[0] == "init":
-		init_out_of_combat()
-		return "Initialised"
-		
 	if parts[0] == "charm":
 		history.setbonus(charm=not history.charm, linkcharm=history.linkcharm, donator=history.donator)
 		return "Toggled Shiny Charm"
+		
 	elif parts[0] == "link":
 		history.setbonus(charm=history.charm, linkcharm=not history.linkcharm, donator=history.donator)
 		return "Toggled Shiny Charm Link"
+		
 	elif parts[0] == "donator":
 		history.setbonus(charm=history.charm, linkcharm=history.linkcharm, donator=not history.donator)
 		return "Toggled Donator"
+		
 	if parts[0] in ("+", "add"):
 		if parts[1].isnumeric():
 			if parts[2].title() in pokes:
@@ -29,6 +28,7 @@ def console(cmd, history):
 				return f"{parts[2].title()} not found"
 		else:
 			return f"{parts[1]} is not a number"
+			
 	if parts[0][0] == "+" and parts[0].replace("+", "").isnumeric():
 		if parts[1].title() in pokes:
 			history.add(f"{parts[0][1:]}x {parts[1].title()}")
@@ -45,6 +45,7 @@ def console(cmd, history):
 				return f"{parts[2].title()} not found"
 		else:
 			return f"{parts[1]} is not a number"
+			
 	if parts[0][0] == "-" and parts[0][1:].isnumeric():
 		if parts[1].title() in pokes:
 			history.sub(f"{parts[0][1:]}x {parts[1].title()}")

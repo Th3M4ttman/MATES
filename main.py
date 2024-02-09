@@ -6,8 +6,58 @@ from console import console
 import curses
 
 history = History()
+__ver__="1.0.0"
 
-#curses window
+
+
+def handle_mons(cap, reported, singles=False, w=3040, h=1440):
+	
+	com = False
+	
+	#Count health bars
+	cropped = np.array(deepcopy(cap).crop((0,0,w,h//3.6)))
+	n_mons = count_mons(cropped)
+	
+	#get mons names
+	mons = get_mons(cap)
+	out = ""
+	
+		
+	if n_mons > 0:
+		com = True
+		if reported:
+			return com, reported, out
+		
+		if len(mons) != n_mons:
+			return com, reported, out
+			
+		#reports the mon
+		reported = True
+		
+		ti = str(datetime.datetime.now()).split(".")[0]
+		log(f"[{ti}]:", list_to_words(mons))
+		#adds it to the history
+		
+		if singles:
+			history.addsingle()
+			history.add(list_to_words(mons))
+			
+		if get_gg(cap):
+			os.system(f"screencap -p /{PATH}/screenshots/GG{mons[0]}.png")
+			out = "GG!! " + list_to_words(mons)
+		else:
+			out = list_to_words(mons)
+			
+	else:
+		reported = False
+			
+	return com, reported, out
+		
+		
+		
+		
+		
+
 def main(scr):
 	
 	global history
@@ -26,6 +76,9 @@ def main(scr):
 	
 	#height and width of the terminal
 	h, w = scr.getmaxyx()
+	
+	splash_screen(scr, "MATES", w, h//2, subtitle="Encounter Tracker", author="Th3M4ttman", ver=__ver__, speed=7, delay=5) 
+	
 	
 	#Auto capture off by default
 	capturing = False
@@ -51,7 +104,7 @@ def main(scr):
 		
 		for i, mon in enumerate(mons):
 			windows.append(Counter(mon, i+2, w, i+2, 0, history))
-		#scr.clear()
+			
 		return windows, len(windows)+2, len(windows)+3
 	
 	#generating windows
@@ -91,40 +144,15 @@ def main(scr):
 		if capturing and datetime.datetime.now() > cap_timer:
 			cap = capture() 
 			if cap:
-				cropped = np.array(deepcopy(cap).crop((0,0,3040,400)))
+				cropped = np.array(deepcopy(cap).crop((0,0,w,h//3.6)))
 				
-				in_combat = count_mons(cropped) > 0#out_of_combat(capture())
-				#determine if in combat
-				if in_combat:
-					n_mons = count_mons(cropped)
-					if not reported and n_mons > 0:
+				in_combat, reported, _out = handle_mons(cap, reported, singles=singles)
+				
+				if _out != "":
+					out = _out
+					clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=5)
+				
 		
-						mons = get_mons(cap)
-						if len(mons) > 0:
-							#reports the mon
-							reported = True
-							ti = str(datetime.datetime.now()).split(".")[0]
-							log(f"[{ti}]:", list_to_words(mons))
-							
-							
-							#adds it to the history and times out capture for 4 seconds
-							
-							if singles:
-								history.addsingle()
-							history.add(list_to_words(mons))
-							cap_timer = datetime.datetime.now() + datetime.timedelta(seconds=1)
-							if get_gg(cap):
-								os.system(f"screencap -p /{PATH}/screenshots/GG{mons[0]}.png")
-								out = "GG!! " + list_to_words(mons)
-							else:
-								out = list_to_words(mons)
-							clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=3)
-						
-						
-				else:
-					reported = False
-					
-			#scr.refresh()
 		
 		#sets the visibility of the total encounters
 		total_window.visible = history.showtotal

@@ -43,12 +43,33 @@ class Capture:
     def toggle(self):
     	self.set(not self.capturing)
     	
-
+def splash_screen(scr, title, x, y, delay=3, subtitle="", author="", ver="", speed=2):
+	
+	curses.curs_set(0)
+	
+	for i in range(0,  6*3):
+			i%=6
+		
+			title_line = y//3
+			subtitle_line = title_line + 2
+			author_line = subtitle_line+2
+			ver_line = author_line + 2
+			
+			
+			scr.addstr(title_line, 0, title.center(x-1), curses.A_BOLD)
+			scr.addstr(subtitle_line, 0, subtitle.center(x-1))
+			scr.addstr(author_line, 0, ("By: "+author).center(x-1))
+			scr.addstr(ver_line, 0, ver.rjust(x-x//3))
+			scr.bkgd(chr(0), curses.color_pair(i))
+			scr.border()
+			scr.refresh()
+			time.sleep(delay/speed/3)
+			scr.clear()
+			
 class Counter:
 	
     def __init__(self, title, h, w, y, x, history):
         self.window = newwin(h, w, y, x)
-        #self.window.box()
         self.value = 0
         self.title = title
         self.visible = True
@@ -76,20 +97,17 @@ class Counter:
 	        	self.window.addstr(0, 0, self.title+f": {intcomma(self.value)}")
 	        	self.window.addstr(0, end, f"{self.prob}%", curses.color_pair(colour_probability(self.prob)))
 	        else:
-	        	pass #self.clear()
+	        	pass 
         except:
         	pass
         self.window.refresh()
         
     def set(self, n):
-        #if n != self.value:
+        
         self.clear()
         self.value = n
         self.refresh()
         
-class LegendCounter(Counter):
-    def __init__(self, title, h, w, y, x, history):
-    	super().__init__(title, h, w, y, x, history)
     	
 class combat():
 	def __init__(self, h, w, y, x, in_combat=False, reported=False, singles=False):
