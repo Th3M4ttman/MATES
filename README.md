@@ -88,3 +88,4 @@ Or type in commands
 | donator                | Toggles donator                                |                                                                                            |
 | link                   | Toggles shiny charm link                       |                                                                                            |
 | singles                | Toggles single tracking                        |                                                                                            |
+| quit                   | Exits the app                                  | Can also use "qq"                                                                          |
