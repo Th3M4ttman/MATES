@@ -1,4 +1,4 @@
-from pokeutil import *
+from .pokeutil import *
 import cv2
 
 def test():

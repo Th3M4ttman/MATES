@@ -1,7 +1,7 @@
 import curses
 import time
 from curses import wrapper, newwin
-from pokeutil import get_probability, colour_probability
+from .pokeutil import get_probability, colour_probability
 import datetime
 from humanize import intcomma
 

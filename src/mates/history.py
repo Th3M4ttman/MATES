@@ -1,7 +1,7 @@
 import os, json
 from collections import defaultdict
 from copy import deepcopy
-from pokeutil import DEFAULT, pokes
+from .pokeutil import DEFAULT, pokes
 
 PATH = "/".join(__file__.split("/")[:-1])
 #print(os.path.exists(f"{PATH}/history.json"))

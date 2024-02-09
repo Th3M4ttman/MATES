@@ -1,8 +1,9 @@
-from history import History
-from pokeutil import *
-from windows import *
+from .history import History
+from .pokeutil import *
+from .windows import *
 import numpy as np
-from console import console
+from .console import console
+import datetime
 import curses
 
 history = History()
@@ -245,5 +246,8 @@ def main(scr):
 	return 
 
 #run program
-x = curses.wrapper(main)
+def run():
+	curses.wrapper(main)
 
+if __name__ == "__main__":
+	run()

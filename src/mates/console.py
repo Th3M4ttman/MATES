@@ -1,4 +1,4 @@
-from pokeutil import pokes
+from .pokeutil import pokes
 
 
 def console(cmd, history):
