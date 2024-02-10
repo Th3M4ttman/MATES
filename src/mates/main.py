@@ -5,6 +5,7 @@ import numpy as np
 from .console import console
 import datetime
 import curses
+from copy import deepcopy
 
 history = History()
 __ver__="1.0.0"
@@ -17,7 +18,9 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 	
 	#Count health bars
 	cropped = np.array(deepcopy(cap).crop((0,0,w,h//3.6)))
+	
 	n_mons = count_mons(cropped)
+	
 	
 	#get mons names
 	mons = get_mons(cap)
@@ -44,7 +47,9 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 			history.add(list_to_words(mons))
 			
 		if get_gg(cap):
-			os.system(f"screencap -p /{PATH}/screenshots/GG{mons[0]}.png")
+			os.system(f"screencap -p {PATH}/screenshots/GG{mons[0]}.png")
+			os.system("play {PATH}/.gg.mp3")
+			
 			out = "GG!! " + list_to_words(mons)
 		else:
 			out = list_to_words(mons)
@@ -54,10 +59,11 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 			
 	return com, reported, out
 		
-		
-		
-		
-		
+
+"""		
+proportions = get_device_proportions()
+device_y, device_x = min(proportions), max(proportions)
+	"""	
 
 def main(scr):
 	

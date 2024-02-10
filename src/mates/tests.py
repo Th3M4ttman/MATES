@@ -1,3 +1,8 @@
+import os
+#os.system("sudo -E play-audio /storage/emulated/0/Documents/MATES/src/mates/gg.mp3")
+#os.system(f"sudo -E screencap -p /storage/emulated/0/Documents/base3.jpg")
+
+
 from .pokeutil import *
 import cv2
 
@@ -34,7 +39,12 @@ def test():
 	else:
 		print("Passed all cases")
 		return True
+import subprocess
 
-if __name__ == "__main__":
+def tests():
 	print("Running tests")
-	test()
+	if test():
+		subprocess.run(["play-audio /storage/emulated/0/Documents/MATES/src/mates/gg.mp3"], shell=True)
+		
+if __name__ == "__main__":
+	tests()
