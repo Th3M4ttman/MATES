@@ -1,0 +1,3 @@
+[console_scripts]
+mates = mates.main:run
+testmates = mates.tests:tests
