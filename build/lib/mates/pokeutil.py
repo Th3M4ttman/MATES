@@ -200,7 +200,7 @@ def get_mons(cap):
 	left = 0
 	top = 0
 	right = device_x
-	bottom = device_y//3.6
+	bottom = device_y//3
 	
 	cropped = cap.crop((left, top, right, bottom))#.convert("RGB")
 	
