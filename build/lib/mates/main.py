@@ -6,10 +6,12 @@ from .console import console
 import datetime
 import curses
 from copy import deepcopy
+from .mons import get_names
 
 history = History()
 __ver__="1.0.0"
 
+hp = cv2.imread(f"{PATH}/hp.png", 0)
 
 
 def handle_mons(cap, reported, singles=False, w=3040, h=1440):
@@ -23,20 +25,44 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 	
 	
 	#get mons names
-	mons = get_mons(cap)
+	
 	out = ""
 	
 		
 	if n_mons > 0:
 		com = True
+		mons = get_names(cap)
+		
+			
+		tries = 1
+		while tries < 3 and len(mons) < n_mons:
+			cap = capture()
+			mons = get_names(cap)
+			tries += 1
+			
+			if len(mons) < n_mons:
+				time.sleep(0.3)
+			else:
+				break
+				
 		if reported:
 			return com, reported, out
 		
-		if len(mons) != n_mons:
+		if len(mons) < 1:
 			return com, reported, out
 			
 		#reports the mon
 		reported = True
+		if True in [True if "Shiny" in m else False for m in mons]:
+			shiny = True
+		else:
+			shiny = False
+		
+		for m in mons:
+			if m in ["Zapdos", "Moltres", "Articuno", "Entei", "Raiku", "Suicune"]:
+				legend = True
+		else:
+			legend = False
 		
 		ti = str(datetime.datetime.now()).split(".")[0]
 		log(f"[{ti}]:", list_to_words(mons))
@@ -46,9 +72,8 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 			history.addsingle()
 			history.add(list_to_words(mons))
 			
-		if get_gg(cap):
+		if shiny or legend:
 			os.system(f"screencap -p {PATH}/screenshots/GG{mons[0]}.png")
-			os.system("play {PATH}/.gg.mp3")
 			
 			out = "GG!! " + list_to_words(mons)
 		else:
@@ -131,7 +156,7 @@ def main(scr):
 	singles = "Singles" in history.data["Tracking"]
 	#main program loop
 	while True:
-		c.refresh(in_combat, reported, singles)
+		c.refresh(in_combat, reported, singles, history.shinies, history.legends)
 		mons = []
 		
 		#clears output every 4 seconds

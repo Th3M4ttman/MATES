@@ -20,7 +20,42 @@ class History():
 		for k, i in DEFAULT.items():
 			self.data[k] = deepcopy(i)
 		self.save()
-				
+	
+	@property
+	def shinies(self):
+		ignore = {
+			"showtotal",
+		    "pcttotal",
+		    "pct",
+		    "Tracking",
+		    "Last_Addition",
+		    "bonus"}
+		    
+		i = 0
+		for key, item in self.data.items():
+			if key in ignore:
+				continue
+			if "Shiny" in key:
+				i += item
+		return i
+		
+	@property
+	def legends(self):
+		ignore = {
+			"showtotal",
+		    "pcttotal",
+		    "pct",
+		    "Tracking",
+		    "Last_Addition",
+		    "bonus"}
+		i = 0
+		for key, item in self.data.items():
+			if key in ignore:
+				continue
+			if key in {"Zapdos", "Moltres", "Articuno", "Entei", "Raiku", "Suicune"}:
+				i += item
+		return i
+		
 	@property
 	def showtotal(self):
 		return self.data["showtotal"]
@@ -127,7 +162,7 @@ class History():
 			if type(mons) is str:
 				mons=[mons]
 			for mon in mons:
-				qty, mon = mon.split("x")
+				qty, mon = mon.split("*")
 				qty = int(qty)
 				mon = mon.replace(" ", "")
 				if mon in self.data.keys():

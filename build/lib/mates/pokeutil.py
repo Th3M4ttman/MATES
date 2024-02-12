@@ -265,8 +265,8 @@ def get_mons(cap):
 		return [mons[0]]
 	return []
 	
-def log(*text, sep=" ", end="\n"):
-	with open(f"{PATH}/log.txt", "a") as f:
+def log(*text, sep=" ", end="\n", error=False):
+	with open(f"{PATH}/{'error' if error else ''}log.txt", "a") as f:
 		f.write(sep.join([str(t) for t in text])+end)
 
 
@@ -277,5 +277,5 @@ def list_to_words(listo):
 	for mon in mons:
 		if out != "":
 			out += ", "
-		out += str(listo.count(mon)) +"x " + mon
+		out += str(listo.count(mon)) +"* " + mon
 	return out

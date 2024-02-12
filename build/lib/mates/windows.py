@@ -110,22 +110,30 @@ class Counter:
         
     	
 class combat():
-	def __init__(self, h, w, y, x, in_combat=False, reported=False, singles=False):
+	def __init__(self, h, w, y, x, in_combat=False, reported=False, singles=False, shinies=0, legends=0):
 		self.in_combat = in_combat
 		self.reported = reported
 		self.singles = singles
 		self.window = curses.newwin(h, w, x, y)
+		self.legends = legends
+		self.shinies = shinies
 		self.refresh()
 		
 	def clear(self):
 		self.window.clear()
 		
-	def refresh(self, combat=False, reported=False, singles=False):
+	def refresh(self, combat=False, reported=False, singles=False, shinies=0, legends=0):
 		self.in_combat = combat
 		self.reported = reported
 		self.singles = singles
+		self.shinies = shinies
+		self.legends = legends
 		
 		self.window.addstr(0, 1, "C", curses.color_pair(1) if self.in_combat else curses.color_pair(2))
 		self.window.addstr(0, 2, "R", curses.color_pair(1) if self.reported else curses.color_pair(2))
 		self.window.addstr(0, 3, "S", curses.color_pair(1) if self.singles else curses.color_pair(2))
+		
+		self.window.addstr(0, 6, str(self.shinies), curses.color_pair(4))
+		n = 7 + len(str(self.shinies))
+		self.window.addstr(0, n, str(self.legends), curses.color_pair(5))
 		self.window.refresh()

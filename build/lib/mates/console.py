@@ -21,9 +21,16 @@ def console(cmd, history):
 		
 	if parts[0] in ("+", "add"):
 		if parts[1].isnumeric():
+			
 			if parts[2].title() in pokes:
 				history.add(f"{parts[1]}x {parts[2].title()}")
 				return f"Added {parts[1]}x {parts[2].title()}"
+			elif parts[2].title() == "Shiny":
+				if parts[3].title() in pokes:
+					history.add(f"{parts[1]}x Shiny {parts[3].title()}")
+					return f"Added {parts[1]}x Shiny {parts[3].title()}"
+				else:
+					return f"{parts[3].title()} not found"
 			else:
 				return f"{parts[2].title()} not found"
 		else:
@@ -41,6 +48,12 @@ def console(cmd, history):
 			if parts[2].title() in pokes:
 				history.sub(f"{parts[1]}x {parts[2].title()}")
 				return f"Subtracted {parts[1]}x {parts[2].title()}"
+			elif parts[2].title() == "Shiny":
+				if parts[3].title() in pokes:
+					history.sub(f"{parts[1]}x Shiny {parts[3].title()}")
+					return f"Subtracted {parts[1]}x Shiny {parts[3].title()}"
+				else:
+					return f"{parts[3].title()} not found"
 			else:
 				return f"{parts[2].title()} not found"
 		else:

@@ -2,10 +2,13 @@ README.md
 setup.py
 src/mates/__init__.py
 src/mates/console.py
+src/mates/fem.png
 src/mates/gg.mp3
 src/mates/history.py
 src/mates/hp.png
+src/mates/hp_backup.png
 src/mates/main.py
+src/mates/mons.py
 src/mates/pokeutil.py
 src/mates/tests.py
 src/mates/windows.py

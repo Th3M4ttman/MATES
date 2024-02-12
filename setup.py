@@ -3,7 +3,7 @@
 import setuptools
 from setuptools import find_packages
 
-__ver__ = "1.0.0"
+__ver__ = "1.0.1"
 
 install_requires = [
         "humanize",
