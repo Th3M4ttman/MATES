@@ -46,10 +46,14 @@ don't get your hopes up too high. this is janky and sometimes doesnt work. if yo
 ## Installation:
 
 ### Automatic
-in termux enter: pip install pymates
+in termux enter:
+
+pip install pymates
 
 ### Manual
-download the latest release from the releases section and run: pip install /whereever/you/put/the/wheel/mates.whl
+download the latest release from the releases section and run:
+
+pip install /whereever/you/put/the/wheel/mates.whl
 
 ### Additional
 if you want to run mates without having to type sudo every time add this to the end of your bashrc located in  /data/data/com.termux/files/usr/etc/bash.bashrc
