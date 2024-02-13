@@ -1,4 +1,0 @@
-humanize
-numpy
-pillow
-pytesseract
