@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.4"
+__ver__="1.0.3"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
@@ -323,7 +323,7 @@ def main(scr):
 							elif mon in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
 								colour = curses.color_pair(5)
 							else:
-								colour = curses.color_pair(1)
+								colour = curses.color_pair(2)
 								
 							string = qty + "x " + mon + (", "  if i > 0 else "")
 							scr.addstr(output_line,i, string, colour)
@@ -342,7 +342,7 @@ def main(scr):
 						elif mon in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
 							colour = curses.color_pair(5)
 						else:
-							colour = curses.color_pair(1)
+							colour = curses.color_pair(2)
 							
 						scr.addstr(output_line, len(qty)+2, mon, colour)
 					
