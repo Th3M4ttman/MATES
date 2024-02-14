@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.3"
+__ver__="1.0.4"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
@@ -267,46 +267,91 @@ def main(scr):
 					
 				elif "add" in out.lower() or "+" in out.lower():
 					colour = curses.color_pair(1)
+					
 					if "+" in out.lower():
-						mons = out.replace("+", "").split(" ")
+						if "," in out.lower():
+							mons = [m.split("* ") for m in out.replace("+", "").split(", ")]
+						else:
+							mons = [out.replace("+", "").split("* ")]
+							
 						i = 0
-						for mon in mons:
-							qty, m = mon.split("*")
-							if "Shiny" in m:
+						for qty, mon in mons:
+							if "Shiny" in mon:
 								colour = curses.color_pair(4)
 								
-							elif m in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
-								colour = curses.color_pair(4)
+							elif mon in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
+								colour = curses.color_pair(5)
 							else:
 								colour = curses.color_pair(1)
-							i += len(mon) + 2
-							scr.addstr(output_line,i, mon, colour)
+								
+							string = qty + "x " + mon + (", "  if i > 0 else "")
+							scr.addstr(output_line,i, string, colour)
+							i += len(string) + 1
+							
 							
 						
 					elif "add" in out.lower():
-						mon = out.split(" ")[-1]
-						rest = out.split(" ")[0:-1]
-						scr.addstr(output_line,0, rest, colour)
+						qty, mon = out.split("* ")
+						qty = qty.split(" ")[-1]
+						
+						scr.addstr(output_line,0, qty+"x ", colour)
 						
 						if "Shiny" in mon:
 							colour = curses.color_pair(4)
 						elif mon in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
-							colour = curses.color_pair(4)
+							colour = curses.color_pair(5)
 						else:
 							colour = curses.color_pair(1)
-						scr.addstr(output_line, len(rest)+1, mon, colour)
+							
+						scr.addstr(output_line, len(qty)+2, mon, colour)
 						
 						
-				elif "subt" in out.lower() or "reset" in out.lower():
+				elif "sub" in out.lower() or "-" in out.lower():
 					colour = curses.color_pair(2)
+					
+					if "-" in out.lower():
+						if "," in out.lower():
+							mons = [m.split("* ") for m in out.replace("-", "").split(", ")]
+						else:
+							mons = [out.replace("-", "").split("* ")]
+							
+						i = 0
+						for qty, mon in mons:
+							if "Shiny" in mon:
+								colour = curses.color_pair(4)
+								
+							elif mon in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
+								colour = curses.color_pair(5)
+							else:
+								colour = curses.color_pair(1)
+								
+							string = qty + "x " + mon + (", "  if i > 0 else "")
+							scr.addstr(output_line,i, string, colour)
+							i += len(string) + 1
+							
+							
+						
+					elif "sub" in out.lower():
+						qty, mon = out.split("* ")
+						qty = qty.split(" ")[-1]
+						
+						scr.addstr(output_line,0, qty+"x ", colour)
+						
+						if "Shiny" in mon:
+							colour = curses.color_pair(4)
+						elif mon in {"Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune"}:
+							colour = curses.color_pair(5)
+						else:
+							colour = curses.color_pair(1)
+							
+						scr.addstr(output_line, len(qty)+2, mon, colour)
 					
 				else:
 					colour= curses.color_pair(5)
 				
 				
 			except Exception as e:
-				if e.__class__ == TypeError:
-					raise e
+				raise e
 					
 		except Exception as e:
 			raise e
