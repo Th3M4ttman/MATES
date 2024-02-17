@@ -1,9 +1,12 @@
-from .pokeutil import pokes
+from .pokeutil import pokes, init
 
 
 def console(cmd, history):
 	parts = cmd.split(" ")
 	
+	if parts[0] == "init":
+		init()
+		return "Initialised"
 	if parts[0] == "singles":
 		return "Toggled singles tracking"
 		

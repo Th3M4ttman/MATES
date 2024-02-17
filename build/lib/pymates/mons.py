@@ -175,11 +175,13 @@ def name_mons(image, template):
 			legend = True
 	return mons, shiny, legend
 
-female_template = cv2.imread(f"{PATH}/fem.png", 0)
-hp = cv2.imread(f"{PATH}/hp.png", 0)
-hp_backup = cv2.imread(f"{PATH}/hp_backup.png", 0)
 
-def find_names(image, template=hp_backup, threshold=0.9, already_tried=False):
+
+
+def find_names(image, threshold=0.9, already_tried=False):
+	
+	hp = cv2.imread(f"{PATH}/hp.png", 0)
+	
 	if type(image) == np.array:
 		image = Image.fromarray(image)
 	left, top, right, bottom = 0, 0, image.width, image.height//3.3
@@ -188,7 +190,7 @@ def find_names(image, template=hp_backup, threshold=0.9, already_tried=False):
 		
 	gray = cv2.cvtColor(np.array(image), cv2.COLOR_BGR2GRAY)
 	
-	matches = cv2.matchTemplate(gray, template, cv2.TM_CCOEFF_NORMED)
+	matches = cv2.matchTemplate(gray, hp, cv2.TM_CCOEFF_NORMED)
 	loc = np.where(matches >= threshold)
 		
 	
@@ -207,9 +209,6 @@ def find_names(image, template=hp_backup, threshold=0.9, already_tried=False):
 			if abs(d) > 100:
 				out.append((x, y))
 				
-	if out == [] and not already_tried:
-		
-		return find_names(np.array(image), hp_backup, threshold, True)
 	
 	return out
 
@@ -254,6 +253,7 @@ class Nameplate():
 		
 
 	def nidoran(self):
+		female_template = cv2.imread(f"{PATH}/fem.png", 0)
 		gray = cv2.cvtColor(np.array(self.image), cv2.COLOR_BGR2GRAY)
 		
 		matches = cv2.matchTemplate(gray, female_template, cv2.TM_CCOEFF_NORMED)
@@ -293,7 +293,7 @@ def extract_nameplates(img, plates):
 	return out
 
 def get_names(cap, as_str=True):
-	names = find_names(cap, hp)
+	names = find_names(cap)
 	nameplates = extract_nameplates(cap, names)
 	return [str(n) for n in nameplates] if as_str else nameplates
 	

@@ -279,3 +279,14 @@ def list_to_words(listo):
 			out += ", "
 		out += str(listo.count(mon)) +"* " + mon
 	return out
+	
+def init():
+	img = capture()
+	device_x, device_y = img.size
+	
+	left = device_x//12.6
+	top = device_y//4.8
+	right = left + device_x//86.85
+	bottom = top + device_y//48
+	cropped = img.crop((left, top, right, bottom))
+	cropped.save(f"{PATH}/hp.png")

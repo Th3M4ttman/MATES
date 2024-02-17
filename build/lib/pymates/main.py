@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.5"
+__ver__="1.0.6"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
@@ -93,6 +93,7 @@ device_y, device_x = min(proportions), max(proportions)
 def main(scr):
 	
 	global history
+	global hp
 	
 	#Initialising ths colours
 	curses.start_color()
@@ -261,9 +262,10 @@ def main(scr):
 			try:
 				scr.addstr(input_line,0, text, curses.color_pair(5))
 				
-				if "toggled" in out.lower():
+				if "toggled" in out.lower() or "Initialised" in out:
 					colour = curses.color_pair(4)
 					scr.addstr(output_line,0, out, colour)
+					hp = cv2.imread(f"{PATH}/hp.png", 0)
 					
 				elif "add" in out.lower() or "+" in out.lower():
 					colour = curses.color_pair(1)
