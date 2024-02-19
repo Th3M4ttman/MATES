@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.6"
+__ver__="1.0.7"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
@@ -132,7 +132,7 @@ def main(scr):
 	
 	mons = history.data["Tracking"] #which mons to track
 	
-	def regen(scr, mons):
+	def regen(scr, mons, w):
 		#regenerates a tracking window for each mon in mons
 		windows = []
 		
@@ -142,7 +142,7 @@ def main(scr):
 		return windows, len(windows)+2, len(windows)+3
 	
 	#generating windows
-	windows, input_line, output_line = regen(scr, mons)
+	windows, input_line, output_line = regen(scr, mons, w)
 	
 	#whether the pokemon on screen has been reported yet
 	reported = True 
@@ -158,8 +158,36 @@ def main(scr):
 	singles = "Singles" in history.data["Tracking"]
 	#main program loop
 	while True:
-		c.refresh(in_combat, reported, singles, history.shinies, history.legends)
+		
+		_h, _w = h, w
+		h, w = scr.getmaxyx()
+		if (h, w) != (_h, _w):
+			
+			
+			"""
+			c.clear()
+			c.window.move(0, h-1)
+			c.window.resize(1, w)
+			c.refresh()"""
+			scr.clear()
+			del c
+			c = combat(1, w, 0, h-1, max_w=w)
+			
+			"""
+			capwin.clear()
+			capwin.window.resize(1, w)
+			capwin.window.move(0, 1)
+			capwin.refresh()"""
+			
+			del capwin
+			capwin = Capture(1, w, 0, 1, history)
+	
+			mons = history.data["Tracking"]
+			regen(scr, mons, w)
+			
 		mons = []
+		
+		c.refresh(in_combat, reported, singles, history.shinies, history.legends)
 		
 		#clears output every 4 seconds
 		if clear_timer:
@@ -167,10 +195,15 @@ def main(scr):
 				out = ""
 				clear_timer = None
 				scr.clear()
+			
 				try:
 					scr.addstr(input_line,0, text)
-				except:
-					pass
+					scr.addstr(output_line, 0, " "*(w-1))
+					regen(scr, mons, w)
+					c.window.clear()
+				except Exception as e:
+					if "addwstr" not in str(e):
+						raise e
 				
 		
 		
@@ -246,9 +279,8 @@ def main(scr):
 			except Exception as e:
 				out = ""
 				text =">: "
-				scr.clear()
-				os.system("clear")
-				raise e
+				if "addwstr" not in str(e):
+					raise e
 				
 		elif key in abc: #add letter to the input
 			text += key
@@ -353,13 +385,14 @@ def main(scr):
 				
 				
 			except Exception as e:
-				raise e
+				if "addwstr" not in str(e):
+					raise e
 					
 		except Exception as e:
-			raise e
-			scr.addstr(output_line,0, "Unkown Error.")
-			clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=3)
-			out = ""
+			if "addwstr" not in str(e):	
+				scr.addstr(output_line,0, "Error "+str(e))
+				clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=10)
+				out = ""
 		
 	
 		scr.refresh()

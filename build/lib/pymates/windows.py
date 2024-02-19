@@ -31,8 +31,10 @@ class Capture:
         except:
         	pass
 
-    def refresh(self):
+    def refresh(self, w=None):
         #self.clear()
+        if w is not None:
+        	self.w = w
         self.addstr("Capturing".center(self.w-1)  if self.capturing else "Not Capturing".center(self.w-1), curses.color_pair(1) if self.capturing else curses.color_pair(2))
         self.window.refresh()
         
@@ -91,9 +93,10 @@ class Counter:
     def addstr(self, *args, attr=0):
         self.window.addstr(*args, attr)
 
-    def refresh(self,):
+    def refresh(self):
         try:
 	        if self.visible is True:
+	        	self.clear()
 	        	end = self.window.getmaxyx()[1] - len("{self.prob}%")
 	        	self.window.addstr(0, 0, self.title+f": {intcomma(self.value)}")
 	        	self.window.addstr(0, end, f"{self.prob}%", curses.color_pair(colour_probability(self.prob)))
@@ -125,25 +128,29 @@ class combat():
 		self.window.clear()
 		
 	def refresh(self, combat=False, reported=False, singles=False, shinies=0, legends=0):
-		self.in_combat = combat
-		self.reported = reported
-		self.singles = singles
-		self.shinies = shinies
-		self.legends = legends
-		
-		self.window.addstr(0, 1, "C", curses.color_pair(1) if self.in_combat else curses.color_pair(2))
-		self.window.addstr(0, 2, "R", curses.color_pair(1) if self.reported else curses.color_pair(2))
-		self.window.addstr(0, 3, "S", curses.color_pair(1) if self.singles else curses.color_pair(2))
-		
-		sstr = str(self.shinies)
-		slen = len(sstr)
-		sstart = self.max_w // 2 - (slen//2)
-		
-		lstr = str(self.legends)
-		llen = len(lstr)
-		lstart = self.max_w - llen - 1
-		
-		self.window.addstr(0, sstart, sstr, curses.color_pair(4))
-		
-		self.window.addstr(0, lstart, lstr, curses.color_pair(5))
-		self.window.refresh()
+		try:
+			self.in_combat = combat
+			self.reported = reported
+			self.singles = singles
+			self.shinies = shinies
+			self.legends = legends
+			
+			self.window.addstr(0, 1, "C", curses.color_pair(1) if self.in_combat else curses.color_pair(2))
+			self.window.addstr(0, 2, "R", curses.color_pair(1) if self.reported else curses.color_pair(2))
+			self.window.addstr(0, 3, "S", curses.color_pair(1) if self.singles else curses.color_pair(2))
+			
+			sstr = str(self.shinies)
+			slen = len(sstr)
+			sstart = self.max_w // 2 - (slen//2)
+			
+			lstr = str(self.legends)
+			llen = len(lstr)
+			lstart = self.max_w - llen - 1
+			
+			self.window.addstr(0, sstart, sstr, curses.color_pair(4))
+			
+			self.window.addstr(0, lstart, lstr, curses.color_pair(5))
+			self.window.refresh()
+		except Exception as e:
+			if "addwstr" not in str(e):
+					raise e
