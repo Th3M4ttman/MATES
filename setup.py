@@ -3,7 +3,7 @@
 import setuptools
 from setuptools import find_packages
 
-__ver__ = "1.0.7"
+__ver__ = "1.0.8"
 long_description=open('README.md').read()
 
 install_requires = [

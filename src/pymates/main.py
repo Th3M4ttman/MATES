@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.7"
+__ver__="1.0.8"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
@@ -264,11 +264,11 @@ def main(scr):
 						history.track("Singles")
 					else:
 						history.untrack("Singles")
-					windows, input_line, output_line = regen(scr, history.data["Tracking"])
+					windows, input_line, output_line = regen(scr, history.data["Tracking"], w)
 				
 				#regenerate the tracking windows
 				if "Tracking" in out or "Untracking" in out or "Untracked" in out:
-					windows, input_line, output_line = regen(scr, history.data["Tracking"])
+					windows, input_line, output_line = regen(scr, history.data["Tracking"], w)
 				
 				#reset the terminal area
 				text =">: "
@@ -298,6 +298,10 @@ def main(scr):
 					colour = curses.color_pair(4)
 					scr.addstr(output_line,0, out, colour)
 					hp = cv2.imread(f"{PATH}/hp.png", 0)
+				
+				elif "track" in out.lower():
+					colour = curses.color_pair(4)
+					scr.addstr(output_line,0, out, colour)
 					
 				elif "add" in out.lower() or "+" in out.lower():
 					colour = curses.color_pair(1)
@@ -382,6 +386,7 @@ def main(scr):
 					
 				else:
 					colour= curses.color_pair(5)
+					scr.addstr(output_line, 0, out, colour)
 				
 				
 			except Exception as e:
@@ -389,7 +394,8 @@ def main(scr):
 					raise e
 					
 		except Exception as e:
-			if "addwstr" not in str(e):	
+			if "addwstr" not in str(e):
+				raise e
 				scr.addstr(output_line,0, "Error "+str(e))
 				clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=10)
 				out = ""

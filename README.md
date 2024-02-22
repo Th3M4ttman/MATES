@@ -56,8 +56,6 @@ download the latest release from the releases section and run:
 pip install /whereever/you/put/the/wheel/mates.whl
 
 ### Additional
-if the detection stops working. get into a single battle and enter the command init. it will grab a pic of the hp icon and use it for detection.
-
 if you want to run mates without having to type sudo every time add this to the end of your bashrc located in  /data/data/com.termux/files/usr/etc/bash.bashrc
 
 alias mates="sudo mates"
