@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.7"
+__ver__="1.0.8"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
