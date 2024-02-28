@@ -1,5 +1,9 @@
 # Matt's Automatic Tracking Encounter Software
 
+Requires root and is somewhat of a security concern as all encounter trackers must be by necessity.
+
+if that dissapoints you make some noise here: <https://forums.pokemmo.com/index.php?/topic/175662-make-encounter-trackers-less-invasive/>
+
 Videos:
 
 <https://youtu.be/IkLZOhnaS2c>
