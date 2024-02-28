@@ -20,7 +20,7 @@ class History():
 		for k, i in DEFAULT.items():
 			data[k] = deepcopy(i)
 			
-		for k, i in self.items():
+		for k, i in self.data.items():
 			for m in ["Moltres", "Zapdos", "Articuno", "Entei", "Raiku", "Suicune", "Shiny"]:
 				if m in k:
 					data[k] = self.data[k]

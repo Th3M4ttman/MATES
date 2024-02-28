@@ -4,6 +4,7 @@ import os
 import cv2
 import numpy as np
 from difflib import get_close_matches
+import shutil
 
 
 
@@ -280,13 +281,32 @@ def list_to_words(listo):
 		out += str(listo.count(mon)) +"* " + mon
 	return out
 	
-def init():
-	img = capture()
-	device_x, device_y = img.size
+
+
+
+
+def crop_image_only_outside(img,tol=0):
+    #Shamelessly lifted from stack exchange
+    # img is 2D or 3D image data
+    # tol  is tolerance
+    mask = img>tol
+    if img.ndim==3:
+        mask = mask.all(2)
+    m,n = mask.shape
+    mask0,mask1 = mask.any(0),mask.any(1)
+    col_start,col_end = mask0.argmax(),n-mask0[::-1].argmax()
+    row_start,row_end = mask1.argmax(),m-mask1[::-1].argmax()
+    return img[row_start:row_end,col_start:col_end]
+
+
+def init(img=None, left=108, top=305, right=135, bottom=330):
+	if img is None:
+		img = capture()
 	
-	left = device_x//12.6
-	top = device_y//4.8
-	right = left + device_x//86.85
-	bottom = top + device_y//48
+	img = crop_image_only_outside(np.array(img))
+	img = Image.fromarray(img)
 	cropped = img.crop((left, top, right, bottom))
+	
+	if os.path.exists(f"{PATH}/hp.png"):
+		shutil.copyfile(f"{PATH}/hp.png", f"{PATH}/hp_backup.png")
 	cropped.save(f"{PATH}/hp.png")

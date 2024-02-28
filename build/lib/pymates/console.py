@@ -17,8 +17,14 @@ def console(cmd, history):
 	parts = cmd.split(" ")
 	
 	if parts[0] == "init":
-		init()
-		return "Initialised"
+		if len(parts) == 5:
+			_, left, top, right, bottom = parts
+			init(None, int(left), int(top), int(right), int(bottom))
+			return f"Initialised with dimensions {[int(i) for i in [left, top, right, bottom]]}"
+		else:
+			init()
+			return "Initialised"
+			
 	if parts[0] == "singles":
 		return "Toggled singles tracking"
 		

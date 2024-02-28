@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: pymates
-Version: 1.0.8
+Version: 1.0.9
 Author: Matt Harris
 Author-email: WorkMatthewJHarris94@gmail.com
 License: MIT
@@ -39,6 +39,8 @@ These captures never leave your device but as a precaution I still wouldn't leav
 
 You can toggle capture by pressing enter with no command typed in.
 
+PS this has only been tested on a single device so if it doesn't work right away be patient and write an issue on the issue tracker I'll try fix stuff as an when I'm made aware.
+
 ### I am not liable nor responsible if you brick your phone trying to root it! If you don't understand phone rooting then it's probably not a great idea to root your phone just for this. There are pros and cons to rooted android.
 
 ## Requirements:
@@ -60,42 +62,36 @@ don't get your hopes up too high. this is janky and sometimes doesnt work. if yo
 
 ## Installation:
 
-### Automatic
-in termux enter:
+Download the release zip and extract it to /storage/emulated/0/Documents
 
-pip install pymates
+In termux enter:
 
-### Manual
-download the latest release from the releases section and run:
+python /storage/emulated/0/Documents/MATES/install.py
 
-pip install /whereever/you/put/the/wheel/mates.whl
-
-### Additional
-if you want to run mates without having to type sudo every time add this to the end of your bashrc located in  /data/data/com.termux/files/usr/etc/bash.bashrc
-
-alias mates="sudo mates"
-
-and if you wanna make it even easier to launch:
-
-alias m=mates
-
+Installation is complete.
 
 ## Usage:
 
 To run the software run "sudo mates" in termux float or "mates" if you added the alias
 
-![interface](https://i.imgur.com/d97zLJc.jpeg)
+![interface](https://i.imgur.com/xxF9mJA.png)
 
 
-| Number | Component                    |
-| ------ | ---------------------------- |
-| 1      | Capture indicator            |
-| 2      | Shiny bonus chance           |
-| 3      | Donator/Charm/Link indicator |
-| 4      | Combat indicator             |
-| 5      | Reported Pokémon indicator   |
-| 6      | Singles tracking indicator   |
-| 7      | Command input/output         |
+| Number | Component                                         |
+| ------ | ------------------------------------------------- |
+| 1      | Capture indicator                                 |
+| 2      | Donator indicator                                 |
+| 3      | Shiny charm indicator                             |
+| 4      | Shiny charm link indicator                        |
+| 5      | Combined shiny bonus                              |
+| 6      | Tracked monster                                   |
+| 7      | Chance of shiny/legendary encounter in N attempts |
+| 8      | Combat indicator                                  |
+| 9      | Combat Reported indicator                         |
+| 10     | Single tracking indicator                         |
+| 11     | Number of shinies                                 |
+| 12     | Number of legends                                 |
+| 13     | Command prompt                                    |
 
 
 press enter to toggle capture on and off
@@ -103,15 +99,17 @@ press enter to toggle capture on and off
 Or type in commands
 
 
-| Command                | Use                                            | Notes                                                                                      |
-| ---------------------- | ---------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Reset (Pokémon)        | Resets encounters for selected Pokémon.        | If given no Pokémon resets all                                                             |
-| add (number) (Pokémon) | Adds number \* Pokémon encounters              | You can also use "+"                                                                       |
-| sub (number) (Pokémon) | Subtracts number \* Pokémon encounters         | You can also use "-"                                                                       |
-| track (Pokémon)        | Sets the Pokémon as a tracked pokemon          | If given no Pokémon it tracks all Pokémon with registered encounters. You can also use "t" |
-| untrack (Pokémon)      | Sets the Pokémon as an untracked pokemon       | If given no Pokémon it untracks all. You can also use "u"                                  |
-| total                  | Toggles the visibility of the total encounters |                                                                                            |
-| charm                  | Toggles shiny charm                            |                                                                                            |
-| donator                | Toggles donator                                |                                                                                            |
-| link                   | Toggles shiny charm link                       |                                                                                            |
-| singles                | Toggles single tracking                        |                                                                                            |
+| Command                | Use                                                                   | Notes                                                                                                                                               |
+| ---------------------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Reset (Pokémon)        | Resets encounters for selected Pokémon.                               | If given no Pokémon resets all                                                                                                                      |
+| add (number) (Pokémon) | Adds number \* Pokémon encounters                                     | You can also use "+"                                                                                                                                |
+| sub (number) (Pokémon) | Subtracts number \* Pokémon encounters                                | You can also use "-"                                                                                                                                |
+| track (Pokémon)        | Sets the Pokémon as a tracked pokemon                                 | If given no Pokémon it tracks all Pokémon with registered encounters. You can also use "t"                                                          |
+| untrack (Pokémon)      | Sets the Pokémon as an untracked pokemon                              | If given no Pokémon it untracks all. You can also use "u"                                                                                           |
+| total                  | Toggles the visibility of the total encounters                        |                                                                                                                                                     |
+| charm                  | Toggles shiny charm                                                   |                                                                                                                                                     |
+| donator                | Toggles donator                                                       |                                                                                                                                                     |
+| link                   | Toggles shiny charm link                                              |                                                                                                                                                     |
+| singles                | Toggles single tracking                                               |                                                                                                                                                     |
+| quit                   | Exits the app                                                         | Can also use "qq"                                                                                                                                   |
+| init                   | Captures a new reference of the HP icon on screen if it's not working | use init left top right bottom of the resulting /data/data/com.termux/files/usr/lib/python3.11/site-packages/pymates/hp.png is cropped incorrectly. |

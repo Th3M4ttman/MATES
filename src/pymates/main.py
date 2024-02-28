@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 history = History()
-__ver__="1.0.8"
+__ver__="1.0.9"
 
 hp = cv2.imread(f"{PATH}/hp.png", 0)
 
@@ -35,15 +35,19 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 		
 			
 		tries = 1
+		
 		while tries < 3 and len(mons) < n_mons:
 			cap = capture()
 			mons = get_names(cap)
 			tries += 1
 			
-			if len(mons) < n_mons:
+			if len(mons) < n_mons or mons == "[]":
 				time.sleep(0.3)
 			else:
 				break
+		
+		if mons == "[]":
+			mons = "Unrecognised"
 				
 		if reported:
 			return com, reported, out
