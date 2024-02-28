@@ -51,13 +51,10 @@ don't get your hopes up too high. this is janky and sometimes doesnt work. if yo
 
 ## Installation:
 
-Download the release zip and extract it to /storage/emulated/0/Documents
+pip install pymates
 
-In termux enter:
-
-python /storage/emulated/0/Documents/MATES/install.py
-
-Installation is complete.
+if you wanna make an alias to make it easier to run:
+alias mates="sudo mates"
 
 ## Usage:
 
