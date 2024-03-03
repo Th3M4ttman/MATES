@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: pymates
-Version: 1.0.9
+Version: 1.0.10
 Author: Matt Harris
 Author-email: WorkMatthewJHarris94@gmail.com
 License: MIT
@@ -14,6 +14,10 @@ Requires-Dist: pillow
 Requires-Dist: pytesseract
 
 # Matt's Automatic Tracking Encounter Software
+
+Requires root and is somewhat of a security concern as all encounter trackers must be by necessity.
+
+if that dissapoints you make some noise here: <https://forums.pokemmo.com/index.php?/topic/175662-make-encounter-trackers-less-invasive/>
 
 Videos:
 
@@ -62,13 +66,10 @@ don't get your hopes up too high. this is janky and sometimes doesnt work. if yo
 
 ## Installation:
 
-Download the release zip and extract it to /storage/emulated/0/Documents
+pip install pymates
 
-In termux enter:
-
-python /storage/emulated/0/Documents/MATES/install.py
-
-Installation is complete.
+if you wanna make an alias to make it easier to run:
+alias mates="sudo mates"
 
 ## Usage:
 

@@ -8,14 +8,12 @@ import curses
 from copy import deepcopy
 from .mons import get_names
 
-history = History()
-__ver__="1.0.9"
 
-hp = cv2.imread(f"{PATH}/hp.png", 0)
+__ver__="1.0.10"
 
 
-def handle_mons(cap, reported, singles=False, w=3040, h=1440):
-	
+
+def handle_mons(cap, reported, singles=False, w=3040, h=1440, history = None):
 	com = False
 	
 	#Count health bars
@@ -46,7 +44,7 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 			else:
 				break
 		
-		if mons == "[]":
+		if mons in ["[]", []]:
 			mons = "Unrecognised"
 				
 		if reported:
@@ -82,6 +80,7 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440):
 			out = "GG!! " + list_to_words(mons)
 		else:
 			out = "+"+list_to_words(mons)
+			history.add(list_to_words(mons))
 			
 	else:
 		reported = False
@@ -96,8 +95,8 @@ device_y, device_x = min(proportions), max(proportions)
 
 def main(scr):
 	
-	global history
-	global hp
+	history = History()
+	hp = cv2.imread(f"{PATH}/hp.png", 0)
 	
 	#Initialising ths colours
 	curses.start_color()
@@ -217,7 +216,7 @@ def main(scr):
 			if cap:
 				cropped = np.array(deepcopy(cap).crop((0,0,w,h//3.6)))
 				
-				in_combat, reported, _out = handle_mons(cap, reported, singles=singles)
+				in_combat, reported, _out = handle_mons(cap, reported, singles=singles, history=history)
 				
 				if _out != "":
 					out = _out
@@ -397,12 +396,15 @@ def main(scr):
 				if "addwstr" not in str(e):
 					raise e
 					
+				scr.addstr(output_line,0, "Error "+str(e))
+				clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=10)
+					
 		except Exception as e:
 			if "addwstr" not in str(e):
 				raise e
-				scr.addstr(output_line,0, "Error "+str(e))
-				clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=10)
-				out = ""
+			scr.addstr(output_line,0, "Error "+str(e))
+			clear_timer = datetime.datetime.now() + datetime.timedelta(seconds=10)
+			out = ""
 		
 	
 		scr.refresh()
