@@ -9,7 +9,7 @@ from copy import deepcopy
 from .mons import get_names
 
 
-__ver__="1.0.10"
+__ver__="1.0.11"
 
 
 
@@ -72,7 +72,7 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440, history = None):
 		
 		if singles:
 			history.addsingle()
-			history.add(list_to_words(mons))
+		history.add(list_to_words(mons))
 			
 		if shiny or legend:
 			os.system(f"screencap -p {PATH}/screenshots/GG{mons[0]}.png")
@@ -80,7 +80,7 @@ def handle_mons(cap, reported, singles=False, w=3040, h=1440, history = None):
 			out = "GG!! " + list_to_words(mons)
 		else:
 			out = "+"+list_to_words(mons)
-			history.add(list_to_words(mons))
+			
 			
 	else:
 		reported = False
